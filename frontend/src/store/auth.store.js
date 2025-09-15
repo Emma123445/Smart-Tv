@@ -6,7 +6,6 @@ import toast from 'react-hot-toast';
 axios.defaults.withCredentials = true;
 
 // Base URL for API requests.
-// const BASE_URL = import.meta.env.MODE === 'development' ? 'http://localhost:8000/api/v1/account' : '/api/v1/account';
 
 export const useAuthStore = create((set) => ({
   user: null,
@@ -18,32 +17,46 @@ export const useAuthStore = create((set) => ({
   isCheckingAuth: true,
   setError: () => set({ error: null }),
   /**
-   * Signs up a new user with the provided username, email, and password.
+   * méthode signup pour l'inscription des utilisateurs username, email, and password.
    */
-  signup: async (credentials) => {
-    set({ user: null, isSigningUp: true, error: null });
-    try {
-      const res = await axios.post('/api/v1/account/signup', credentials);
-      set({ user: res.data.user, isSigningUp: false });
-    } catch (error) {
-      set({ isSigningUp: false, error: error.response.data.message });
-      throw error;
-    }
-  },
+signup: async (credentials) => {
+  set({ user: null, isSigningUp: true, error: null });
+  try {
+    const res = await axios.post('/api/auth/register', credentials);
+    set({
+      user: res.data.user,
+      token: res.data.token,
+      isSigningUp: false,
+    });
+    return res.data;
+  } catch (error) {
+    set({
+      isSigningUp: false,
+      error: error.response?.data?.message || 'Erreur inscription',
+    });
+    throw error;
+  }
+},
 
-  /**
-   * Logs in the user with the provided credentials.
-   */
-  login: async (credentials) => {
-    set({ user: null, isLoggingIn: true, error: null });
-    try {
-      const res = await axios.post('/api/v1/account/login', credentials);
-      set({ user: res.data.user, isLoggingIn: false });
-    } catch (error) {
-      set({ isLoggingIn: false, error: error.response.data.message });
-      throw error;
-    }
-  },
+login: async (credentials) => {
+  set({ isLoggingIn: true, error: null });
+  try {
+    const res = await axios.post('/api/auth/login', credentials);
+    set({
+      user: res.data.user,
+      token: res.data.token,
+      isLoggingIn: false,
+    });
+    return res.data;
+  } catch (error) {
+    set({
+      isLoggingIn: false,
+      error: error.response?.data?.message || 'Login failed',
+    });
+    throw error;
+  }
+},
+
 
   /**
    * Logs out the current user.
@@ -54,7 +67,7 @@ export const useAuthStore = create((set) => ({
   logout: async () => {
     set({ isLoggingOut: true });
     try {
-      await axios.post('/api/v1/account/logout');
+      await axios.post('/api/auth/logout');
       set({ user: null, isLoggingOut: false });
       toast.success('Logged out successfully');
     } catch (error) {

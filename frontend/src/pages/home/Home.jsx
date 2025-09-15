@@ -1,18 +1,18 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Info, Play } from 'lucide-react';
-
 import Navbar from '../../components/Navbar';
+           
 import Category from '../../components/Category';
 import HomeScreenSkeleton from '../../components/skeletons/HomeScreenSkeleton';
-import useGetTrendingContent from '../../hooks/useGetTrendingContent';
+import useGetTrendingContent from '../../hooks/useGetTrendingContent'; 
 import { MOVIE_CATEGORIES, ORIGIN_IMG_BASE_URL, TV_CATEGORIES } from '../../utils/constants.js';
-import { useContentStore } from '../../store/content.store.js';
+import { useContentStore } from '../../store/content.store.js'; 
 
 const Home = () => {
   const [imgLoading, setImgLoading] = useState(true);
   const { trendingContent } = useGetTrendingContent();
-  const { contentType } = useContentStore();
+  const { contentType } = useContentStore(); 
 
   // render content loading skeleton
   if (!trendingContent) return <HomeScreenSkeleton />;
@@ -45,20 +45,19 @@ const Home = () => {
                 ? trendingContent?.overview?.slice(0, 200) + '...'
                 : trendingContent?.overview}
             </p>
-          </div>
+          </div> 
           <div className="mt-8 md:mt-2 flex gap-2">
             <Link
               to={`/watch/${trendingContent?.id}`}
               className="flex items-center bg-white font-bold text-black py-2 px-3 rounded-lg hover:bg-white/80"
             >
-              <Play className="size-4 mr-2 fill-black" /> Watch Now
+              <Play className="size-4 mr-2 fill-black" /> Lecture
             </Link>
             <Link
               to={`/watch/${trendingContent?.id}`}
-              className="flex items-center bg-gray-500/95 hover:bg-gray-500 text-black py-2 px-4 rounded-lg"
-            >
-              <Info className="size-4 mr-2" /> More Info
-            </Link>
+              className="flex items-center bg-gray-500/95 hover:bg-gray-500 text-black py-2 px-4 rounded-lg">
+              <Info className="size-4 mr-2" /> Plus d info!
+            </Link> 
           </div>
         </div>
       </div>

@@ -1,21 +1,27 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-
 import { useContentStore } from '../store/content.store';
+import { useAuthStore } from '../store/auth.store';
 
-const useGetTrendingContent = () => {
+export const useGetTrendingContent = () => {
   const [trendingContent, setTrendingContent] = useState(null);
   const { contentType } = useContentStore();
+  const { token } = useAuthStore(); // on récupère le token si dispo
 
   useEffect(() => {
-    // Fetch trending content based on the current content type
     const getTrendingContent = async () => {
-      const res = await axios.get(`/api/v1/${contentType}/trending`);
-      setTrendingContent(res.data.content);
+      try {
+        const res = await axios.get(`/api/v1/${contentType}/trending`, {
+          headers: token ? { Authorization: `Bearer ${token}` } : {} // facultatif
+        });
+        setTrendingContent(res.data.content);
+      } catch (err) {
+        console.error("Erreur lors du chargement du contenu trending", err);
+      }
     };
 
     getTrendingContent();
-  }, [contentType]);
+  }, [contentType, token]);
 
   return { trendingContent };
 };

@@ -11,7 +11,7 @@ import { ORIGIN_IMG_BASE_URL } from '../utils/constants.js';
 import { formatReleaseDate } from '../utils/formatDate.js';
 import { useContentStore } from '../store/content.store.js';
 
-const WatchPage = () => {
+const WatchPage = () => { 
   const { id } = useParams();
   const [loading, setLoading] = useState(true);
   const [trailers, setTrailers] = useState([]);

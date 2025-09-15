@@ -1,5 +1,6 @@
+// LoginPage.jsx
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom'; // ⚡ ici
 import { Loader, Lock, Mail } from 'lucide-react';
 import toast from 'react-hot-toast';
 
@@ -8,24 +9,27 @@ import Input from '../components/Input';
 import MotionDiv from '../components/MotionDiv';
 import MotionButton from '../components/MotionButton';
 import { useAuthStore } from '../store/auth.store.js';
+import Watch from './WatchPage.jsx';
 
 const LoginPage = () => {
-  // Initialize state variables for form inputs
   const [form, setForm] = useState({ email: '', password: '' });
+  const { isLoggingIn, login, error, setError, user } = useAuthStore();
+  const navigate = useNavigate(); //
 
-  // Use auth store for login process
-  const { isLoggingIn, login, error, setError } = useAuthStore();
-
-  // reset error state on component's first render
   useEffect(() => setError(), [setError]);
 
-  // Handle form input changes and update state accordingly
+  //rediriger si déjà connecté
+  useEffect(() => {
+    if (user) {
+      navigate('/watch'); // redirige vers la page watch après connexion
+    }
+  }, [user, navigate]);
+
   const handleOnChange = (e) => {
     setError();
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  // Handle form submission
   const handleOnSubmit = (e) => {
     e.preventDefault();
     const { email, password } = form;
@@ -60,9 +64,7 @@ const LoginPage = () => {
                 Forgot password?
               </Link>
             </div>
-            {/* if have any error message display it */}
             {error && <p className="text-red-500">{error}</p>}
-            {/* submit button */}
             <MotionButton type="submit" disabled={isLoggingIn}>
               {isLoggingIn ? <Loader className="size-6 animate-spin mx-auto" /> : 'Sign In'}
             </MotionButton>

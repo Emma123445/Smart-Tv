@@ -1,16 +1,8 @@
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { ChevronRight } from 'lucide-react';
+// import { useState } from 'react';
+import { Link} from 'react-router-dom';
+// import { ChevronRight , useNavigate  } from 'lucide-react';
 
 const Guest = () => {
-  const [email, setEmail] = useState('');
-  const navigate = useNavigate();
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Navigate to sign-up page when user submits the form
-    navigate('/signup?email=' + email);
-  };
 
   return (
     <div className="w-full relative">
@@ -21,35 +13,19 @@ const Guest = () => {
             <img src="/netflix-logo.png" alt="app-logo" className="w-32 md:w-44" />
           </Link>
           <Link to="/login" className="text-white bg-red-600 hover:bg-red-700 py-2 px-4 rounded-lg">
-            Sign In
+            Se connecter
           </Link>
         </header>
         {/* hero section */}
         <div className="flex flex-col items-center justify-center text-center max-w-screen-sm w-full overflow-x py-32 px-4 md:px-0 text-white mx-auto">
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-2 md:mb-4 text-balance">
-            Unlimited movies, TV shows, and more.
+            Des films et séries à volonté.
           </h1>
-          <h3 className="text-lg md:text-2xl font-semibold gap-2 md:gap-20 mb-2 md:mb-4">Watch anywhere, anytime.</h3>
+          <h3 className="text-lg md:text-2xl font-semibold gap-2 md:gap-20 mb-2 md:mb-4">Regarder partout et n importe quand</h3>
           <p className="mb-6 md:mb-8 text-balance text-xs leading-5">
-            Ready to watch? Enter your email to create or restart your membership.
+            Prêt à regarder des films et des séries sans limite ? Créez votre compte maintenant.
           </p>
-          <form
-            className="flex flex-col justify-evenly md:flex-row gap-2 md:gap-1 w-1/2 md:w-10/12"
-            onSubmit={handleSubmit}
-          >
-            <input
-              type="email"
-              id="email"
-              autoComplete="off"
-              placeholder="Email address"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full md:w-1/2 py-3 px-4 flex flex-1 border border-gray-500 rounded-lg bg-transparent text-white focus:outline-none focus:ring"
-            />
-            <button className="text-xl lg:text-2xl text-white bg-red-600 hover:bg-red-700 py-1 lg:py-2 px-2 lg:px-4 rounded-lg flex justify-center items-center">
-              Get Started <ChevronRight className="size-4 md:size-8" />
-            </button>
-          </form>
+          
         </div>
       </div>
 
@@ -58,10 +34,10 @@ const Guest = () => {
         <div className="flex max-w-6xl mx-auto items-center justify-between md:flex-row flex-col px-4 md:px-2">
           <div className="flex-1 text-center md:text-left">
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold gap-2 md:gap-20 mb-3 md:mb-4">
-              Enjoy your TV Show
+              Regardez sur votre TV
             </h2>
             <p className="text-xs md:text-lg text-balance leading-5">
-              Watch on Smart TVs, PlayStation, Xbox, Chromecast, Apple TV, Blu-ray players, and more.
+              Regardez des films et des séries sur votre Smart TV, Playstation, Xbox, Chromecast, Apple TV, lecteur Blu-ray et bien plus encore.
             </p>
           </div>
           <div className="flex-1 relative">
@@ -91,7 +67,7 @@ const Guest = () => {
                 <img src="/stranger-things-sm.png" alt="Stranger Things Small image" className="h-full" />
                 <div className="flex justify-between items-center w-full">
                   <div className="flex flex-col gap-0">
-                    <span className="text-md lg:text-lg font-bold">Stranger Things</span>
+                    <span className="text-md lg:text-lg font-bold"> Stranger Things </span>
                     <span className="text-sm text-blue-500">Downloading...</span>
                   </div>
                   <img src="/download-icon.gif" alt="download icon" className="h-12" />
@@ -101,10 +77,10 @@ const Guest = () => {
           </div>
           <div className="flex-1 text-center md:text-left">
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold gap-2 md:gap-20 mb-3 md:mb-4 text-balance">
-              Download your shows to watch offline
+              Téléchargez vos séries pour les regarder hors connexion
             </h2>
             <p className="text-xs md:text-lg text-balance leading-5">
-              Save your favorites easily and alyways have something to watch.
+              Enregistrez vos films et séries préférés et regardez-les où que vous soyez, même sans connexion Internet.
             </p>
           </div>
         </div>
@@ -117,10 +93,10 @@ const Guest = () => {
         <div className="flex max-w-6xl mx-auto items-center justify-center md:flex-row flex-col px-4 md:px-2">
           <div className="flex-1 text-center md:text-left">
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold gap-2 md:gap-20 mb-3 md:mb-4">
-              Watch everywhere
+              Regardez partout. Annulez à tout moment.
             </h2>
             <p className="text-xs md:text-lg text-balance leading-5">
-              Stream unlimited movies and TV shows on your phone, tablet, laptop, and TV.
+              Regardez des films et des séries sur votre smartphone, tablette, ordinateur et TV sans frais supplémentaires.
             </p>
           </div>
           <div className="flex-1 relative">
@@ -147,10 +123,11 @@ const Guest = () => {
             <img src="/kids.png" alt="Device image" className="mt-4" />
           </div>
           <div className="flex-1 text-center md:text-left">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold mb-3 md:mb-4">Create profile for kids</h2>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold mb-3 md:mb-4">
+              Créez des profils pour les enfants.
+            </h2>
             <p className="text-xs md:text-lg text-balance leading-5">
-              Send kids on adventures with their favorite charcters in a space made just for them-free with your
-              membershop.
+              Les enfants disposent de leur propre espace sécurisé, où ils peuvent explorer et profiter de séries et de films adaptés à leur âge.
             </p>
           </div>
         </div>

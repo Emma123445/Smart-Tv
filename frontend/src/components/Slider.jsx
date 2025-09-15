@@ -5,7 +5,7 @@ const Slider = ({ title, children }) => {
   const sliderRef = useRef(null);
   const [showArrows, setShowArrows] = useState(false);
 
-  // mouse click listener for cards-sliding
+  // mouse click listener for cards-sliding 
   const slideLeft = () => {
     if (sliderRef.current) sliderRef.current.scrollBy({ left: -sliderRef.current.offsetWidth, behavior: 'smooth' });
   };

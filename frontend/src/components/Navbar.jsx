@@ -6,7 +6,7 @@ import Logo from './SiteLogo';
 import { useAuthStore } from '../store/auth.store.js';
 import { useContentStore } from '../store/content.store.js';
 
-const Navbar = () => {
+const Navbar = () => { 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
@@ -16,7 +16,10 @@ const Navbar = () => {
   return (
     <header className="max-w-6xl mx-auto flex flex-wrap items-center justify-between p-4 h-20">
       <div className="flex item-center gap-10 z-50">
-        <Logo />
+        <Link to="/" className="text-white hover:text-gray-400" onClick={() => setContentType('movie')}>
+          <img src="/netflix-logo.png" alt="app-logo" className="w-32 md:w-44" />
+          </Link>
+        {/* <Logo /> */}
         {/* Desktop nav items */}
         <div className="hidden sm:flex gap-4 items-center text-xl">
           <Link to="/" className="text-white hover:text-gray-400" onClick={() => setContentType('movie')}>

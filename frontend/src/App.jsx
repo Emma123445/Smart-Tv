@@ -1,7 +1,8 @@
-import { useEffect } from 'react';
+import { useEffect } from 'react';  
 import { Toaster } from 'react-hot-toast';
 import { Routes, Route, Navigate } from 'react-router-dom';
 
+//import Home from './pages/home/Home';
 import Home from './pages/home/HomePage';
 import Search from './pages/SearchPage';
 import SearchHistory from './pages/SearchHistoryPage';
@@ -27,34 +28,33 @@ function App() {
 
   return (
     <>
-      <Routes>
-        {/* protected routes */}
-        <Route path="/" element={<Home />} />
-        <Route path="/search" element={user ? <Search /> : <Navigate to="/login" />} />
-        <Route path="/history" element={user ? <SearchHistory /> : <Navigate to="/login" />} />
-        <Route path="/watch/:id" element={user ? <Watch /> : <Navigate to="/login" />} />
+      <Routes> 
+        {/* accessible à tout le monde */} 
+        <Route path="/" element={<Home />} /> 
 
-        {/* public routes for the authentication or authorization page */}
-        <Route path="/login" element={!user ? <Login /> : <Navigate to="/" />} />
+        {/* routes protégées */} 
+        <Route path="/search" element={user ? <Search /> : <Navigate to="/login" />} /> 
+        <Route path="/history" element={user ? <SearchHistory /> : <Navigate to="/login" />} /> 
+        <Route path="/watch/:id" element={user ? <Watch /> : <Navigate to="/login" />} /> 
+
+        {/* auth routes (redirige vers / si déjà connecté) */} 
+        <Route path="/login" element={!user ? <Login /> : <Navigate to="/" />} /> 
         <Route path="/signup" element={!user ? <SignUp /> : <Navigate to="/" />} />
-        <Route path="/forgot/password" element={!user ? <ForgotPassword /> : <Navigate to="/" />} />
-        <Route path="/reset/password/:token" element={!user ? <ResetPassword /> : <Navigate to="/" />} />
+        <Route path="/forgot/password" element={!user ? <ForgotPassword /> : <Navigate to="/" />} /> 
+        <Route path="/reset/password/:token" element={!user ? <ResetPassword /> : <Navigate to="/" />} /> 
         <Route
           path="/verify/email"
           element={user && !user?.isVerified ? <EmailVerification /> : <Navigate to="/login" />}
         />
 
-        {/* Add more routes as needed */}
-        {/* <Route path="/profile" element={<Profile />} />
-      <Route path="/settings" element={<Settings />} /> */}
-
-        {/* route for the 404 page */}
+        {/* 404 */}
         <Route path="/*" element={<NotFound />} />
       </Routes>
+
       <Footer />
       <Toaster />
     </>
   );
-}
+} 
 
 export default App;

@@ -2,8 +2,10 @@ const router = require("express").Router();
 const User = require("../models/User");
 const CryptoJS = require("crypto-js");
 const jwt = require("jsonwebtoken");
+const dotenv = require("dotenv");
+dotenv.config();
 
-// Register
+// Register 
 router.post("/register", async (req, res) => {
   const newUser = new User({
     username: req.body.username,
@@ -11,7 +13,7 @@ router.post("/register", async (req, res) => {
     password: CryptoJS.AES.encrypt(req.body.password, process.env.SECRET_KEY).toString(),
   });
 
-  try {
+  try { 
     const user = await newUser.save();
     res.status(201).json(user);
   } catch (err) {
@@ -19,15 +21,22 @@ router.post("/register", async (req, res) => {
   }
 });
 
+
 // Login
 router.post("/login", async (req, res) => {
   try {
     const user = await User.findOne({ email: req.body.email });
-    !user && res.status(404).json("Utilisateur introuvable");
+
+    if (!user) {
+      return res.status(404).json("Utilisateur introuvable");
+    }
+
     const bytes = CryptoJS.AES.decrypt(user.password, process.env.SECRET_KEY);
     const originalPassword = bytes.toString(CryptoJS.enc.Utf8);
-    originalPassword !== req.body.password && res.status(401).json("Mot de passe incorrect");
-
+  
+    if (originalPassword !== req.body.password) {
+      return res.status(401).json("Mot de passe incorrect");
+    }
 
     const accessToken = jwt.sign(
       {
@@ -37,18 +46,20 @@ router.post("/login", async (req, res) => {
       process.env.JWT_SECRET,
       { expiresIn: "5d" }
     );
+
     res.cookie("accessToken", accessToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
     });
 
-    const { password, ...info } = user._doc; // Exclude password from response 
-    res.status(200).json({...info, accessToken });
+    const { password, ...info } = user._doc;
+    res.status(200).json({ ...info, accessToken });
 
   } catch (err) {
-    res.status(500).json(err);
-  }
+  console.log("Erreur lors du login :", err); // Ajoute ce log
+  res.status(500).json("Erreur serveur");     // Reste plus clair pour le client
+}
 });
 
 

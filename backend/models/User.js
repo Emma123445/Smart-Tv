@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+const dotenv = require('dotenv');
+dotenv.config();
 
 const UserSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true },

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Loader, Mail, User, Lock } from 'lucide-react';
 import toast from 'react-hot-toast';
 
@@ -8,11 +8,11 @@ import Input from '../components/Input';
 import MotionDiv from '../components/MotionDiv';
 import MotionButton from '../components/MotionButton';
 import PasswordStrengthMeter from '../components/PasswordStrengthMeter';
-import { useAuthStore } from '../store/auth.store.js';
+import { useAuthStore } from '../store/auth.store.js'; 
 
 const SignUpPage = () => {
-  // Extract email from query parameters if provided
-  const { searchParams } = new URL(document.location);
+  // Extraction de l'email des paramètres de requête
+  const [searchParams] = useSearchParams();
   const userEmail = searchParams.get('email');
 
   // Initialize state variables with email extracted from query parameters or an empty string
@@ -22,12 +22,10 @@ const SignUpPage = () => {
     password: '',
   });
 
-  // Use auth store for signup process
-  const { isSigningUp, signup, error, setError } = useAuthStore();
+  // methode de auth store
+  const { isSigningUp, signup, error, setError, user } = useAuthStore();
+    const navigate = useNavigate();
 
-  // reset error state on component's first render
-  useEffect(() => setError(), [setError]);
-  const navigate = useNavigate();
 
   // Handle form input changes and update state accordingly
   const handleOnChange = (e) => {
@@ -36,16 +34,17 @@ const SignUpPage = () => {
   };
 
   // handle account signup
-  async function handleSignUp() {
+  useEffect(() => setError(), [setError]);
+  const handleSignUp = async () => {
     try {
       const { email, username, password } = form;
       await signup({ username, email, password });
-      navigate('/verify/email');
+      navigate('/verify/email'); // Redirection unique ici
     } catch (error) {
       console.error(error);
-      throw error;
     }
-  }
+  };
+
 
   // Handle form submission
   const handleOnSubmit = async (e) => {
@@ -53,8 +52,8 @@ const SignUpPage = () => {
     // Show success or failure toast message based on signup result
     toast.promise(handleSignUp(), {
       loading: 'Signing up...',
-      success: <b>Signup successful!</b>,
-      error: <b>Signup failed</b>,
+      success: <b>Inscription réussie </b>,
+      error: <b>Inscription échouer</b>,
     });
   };
 
