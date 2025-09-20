@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
-const dotenv = require('dotenv');
-dotenv.config();
+const dotenv = require('dotenv');    
+dotenv.config();      
 
 const UserSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true },
@@ -14,3 +14,4 @@ const UserSchema = new mongoose.Schema({
     timestamps: true 
 });
 module.exports = mongoose.model("User", UserSchema);
+

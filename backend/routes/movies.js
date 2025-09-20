@@ -1,5 +1,7 @@
 const router = require("express").Router();
 const movie = require("../models/Movie");
+const mongoose = require("mongoose");
+const User = require("../models/User");
 const verifyToken = require("../verifyToken");
 
 
@@ -22,7 +24,7 @@ router.post("/", verifyToken, async (req, res)=>{
 router.put("/:id", verifyToken, async (req, res)=>{
     if (req.user.isAdmin) {
         try {
-            const updatedMovie = await Movie.findByIdAndUpdate(req.params.id,
+            const updatedMovie = await movie.findByIdAndUpdate(req.params.id,
                 {
                 $set: req.body, 
             },
@@ -42,7 +44,7 @@ router.put("/:id", verifyToken, async (req, res)=>{
 router.delete("/:id", verifyToken, async (req, res)=>{
     if (req.user.isAdmin) {
         try {
-            await Movie.findByIdAndDelete(req.params.id);
+            await movie.findByIdAndDelete(req.params.id);
             res.status(200).json("Film supprimé avec succès");
         } catch (err) {
             res.status(500).json(err);
@@ -54,14 +56,33 @@ router.delete("/:id", verifyToken, async (req, res)=>{
 });
 
 //get movie
-router.get("/:id", verifyToken, async (req, res)=>{
-        try {
-           const movie = await Movie.findById(req.params.id);
-            res.status(200).json(movie);
-        } catch (err) {
-            res.status(500).json(err);
-        }    
-    
+router.get("/find/:id", verifyToken, async (req, res) => {
+  const id = req.params.id;
+  console.log("GET /api/movies/find/:id — id:", id);
+
+  try {
+    // Vérif ObjectId
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ error: "ID invalide (24 hex chars attendus)" });
+    }
+
+    // Vérif connexion Mongo
+    if (mongoose.connection.readyState !== 1) {
+      console.error("MongoDB not connected — readyState:", mongoose.connection.readyState);
+      return res.status(503).json({ error: "Base de données non disponible" });
+    }
+
+    // Requête (lean évite certains soucis de sérialisation)
+    const movie = await movie.findById(id).lean();
+    if (!movie) return res.status(404).json({ error: "Film introuvable" });
+
+    res.status(200).json(movie);
+  } catch (err) {
+    // Affiche la stack claire en console pour debug
+    console.error("Erreur GET /find/:id :", err);
+    // En prod renvoie un message générique ; en dev tu peux renvoyer err.message
+    res.status(500).json({ error: err.message || "Erreur serveur" });
+  }
 });
 
 //get Random movie
@@ -70,12 +91,12 @@ router.get("/random", verifyToken, async (req, res)=>{
     let movie;
         try {
             if (type === "series") {
-                movie = await Movie.aggregate([
+                movie = await movie.aggregate([
                     { $match: { isSeries: true } },
                     { $sample: { size: 1 } }
                 ]);  
             } else {
-                movie = await Movie.aggregate([
+                movie = await movie.aggregate([
                     { $match: { isSeries: false } },
                     { $sample: { size: 1 } }
                 ]);   
